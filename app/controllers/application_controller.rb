@@ -12,15 +12,15 @@ class ApplicationController < ActionController::Base
   # end
 
   # skip_forgery_protection
-  
+
   # End hacks.
   ##############################################################################
-  
+
   before_action :authenticate_user!
 
-  include Pundit
-  
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized 
+  include Pundit::Authorization
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
-    
+
     redirect_back(fallback_location: root_url)
   end
 end
